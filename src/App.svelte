@@ -3,16 +3,16 @@
   import { onMount } from 'svelte';
 
   const allDots = [
-    { id: 'A', speed: 0.05, color: '#1f77b4', description: 'Whites' },
-    { id: 'B', speed: 0.08, color: '#ff7f0e', description: 'Black' },
-    { id: 'C', speed: 0.11, color: '#2ca02c', description: 'Latinos' },
-    { id: 'D', speed: 0.14, color: '#d62728', description: 'Asians' }
+    { id: 'A', speed: 0.05, color: '#1f77b4', description: 'Blue dot info' },
+    { id: 'B', speed: 0.08, color: '#ff7f0e', description: 'Orange dot info' },
+    { id: 'C', speed: 0.11, color: '#2ca02c', description: 'Green dot info' },
+    { id: 'D', speed: 0.14, color: '#d62728', description: 'Red dot info' }
   ];
 
   let currentSection = 0;
 
   onMount(() => {
-    // Figure out what section of the page you are on
+    // Figuring out where in the web page you are
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
@@ -28,6 +28,7 @@
     document.querySelectorAll('.trigger').forEach(el => observer.observe(el));
   });
 
+  // changes dynamically
   $: activeDots = currentSection === 0 ? allDots : [allDots[currentSection - 1]];
   $: showInfoFor = currentSection === 0 ? null : activeDots[0].id;
   $: freezeAfterDone = currentSection === 0;
@@ -39,20 +40,6 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-  }
-
-  .info-label {
-    position: absolute;
-    top: 1rem;
-    right: 2rem;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 1rem;
-    border-radius: 8px;
-    font-weight: bold;
-    max-width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    pointer-events: none;
-    z-index: 10;
   }
 
   .scroll-overlay {
@@ -73,16 +60,11 @@
   }
 </style>
 
+<!-- Single persistent hill visual -->
 <div class="page">
-  <Hill dots={activeDots} freezeAfterDone={freezeAfterDone} />
+  <Hill {activeDots} {showInfoFor} {freezeAfterDone} />
 
-  {#if showInfoFor}
-    <div class="info-label">
-      <h2>Dot {showInfoFor}</h2>
-      <p>{activeDots[0].description}</p>
-    </div>
-  {/if}
-
+  <!-- Invisible scroll triggers -->
   <div class="scroll-overlay">
     <div class="trigger" data-section="0"></div>
     <div class="trigger" data-section="1"></div>
