@@ -10,8 +10,11 @@
   ];
 
   let currentSection = 0;
+  let triggerElements = [];
 
   onMount(() => {
+    triggerElements = Array.from(document.querySelectorAll('.trigger'));
+
     // Figuring out where in the web page you are
     const observer = new IntersectionObserver(
       (entries) => {
@@ -25,9 +28,26 @@
       { threshold: 0.6 }
     );
 
-    document.querySelectorAll('.trigger').forEach(el => observer.observe(el));
+    triggerElements.forEach(el => observer.observe(el));
+
+    window.addEventListener('keydown', handleKey);
   });
 
+  const scrollToSection = (index) => {
+    if (triggerElements[index]) {
+      triggerElements[index].scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  const handleKey = (event) => {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      scrollToSection(Math.min(currentSection + 1, triggerElements.length - 1));
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      scrollToSection(Math.max(currentSection - 1, 0));
+    }
+  }
   // changes dynamically
   $: activeDots = currentSection === 0 ? allDots : [allDots[currentSection - 1]];
   $: showInfoFor = currentSection === 0 ? null : activeDots[0].id;
@@ -61,11 +81,43 @@
   scroll-snap-align: start;
   pointer-events: none;
 }
+
+.arrow-controls {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.arrow-controls button {
+  background: #2a2a2a;
+  color: #f4f4f4;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
+  font-family: 'Georgia', serif;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.arrow-controls button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 </style>
 
 <!-- Single persistent hill visual -->
 <div class="page">
   <Hill {activeDots} {showInfoFor} {freezeAfterDone} />
+
+  <div class="arrow-controls">
+    <button on:click={() => scrollToSection(currentSection - 1)} disabled={currentSection === 0}>↑</button>
+    <button on:click={() => scrollToSection(currentSection + 1)} disabled={currentSection === 4}>↓</button>
+  </div>
 
   <!-- Invisible scroll triggers -->
   <div class="scroll-overlay">
