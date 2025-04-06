@@ -1,34 +1,44 @@
 <script>
   import Hill from './lib/Hill.svelte';
+  import { onMount } from 'svelte';
 
-  let hoveredDot = null;
-
-  const dots = [
+  const allDots = [
     { id: 'A', speed: 0.05, color: '#1f77b4', description: 'Whites' },
-    { id: 'B', speed: 0.08, color: '#ff7f0e', description: 'Blacks' },
+    { id: 'B', speed: 0.08, color: '#ff7f0e', description: 'Black' },
     { id: 'C', speed: 0.11, color: '#2ca02c', description: 'Latinos' },
     { id: 'D', speed: 0.14, color: '#d62728', description: 'Asians' }
   ];
 
-  const handleHoverDot = (dot) => {
-    hoveredDot = dot;
-  };
+  let currentSection = 0;
+
+  onMount(() => {
+    // Figure out what section of the page you are on
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const section = /** @type {HTMLElement} */ (entry.target);
+            currentSection = parseInt(section.dataset.section || '0');
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    document.querySelectorAll('.trigger').forEach(el => observer.observe(el));
+  });
+
+  $: activeDots = currentSection === 0 ? allDots : [allDots[currentSection - 1]];
+  $: showInfoFor = currentSection === 0 ? null : activeDots[0].id;
+  $: freezeAfterDone = currentSection === 0;
 </script>
 
 <style>
   .page {
-    display: flex;
-    flex-direction: column;
+    position: relative;
     width: 100vw;
     height: 100vh;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-  }
-
-  .section {
-    height: 100vh;
-    scroll-snap-align: start;
-    position: relative;
+    overflow: hidden;
   }
 
   .info-label {
@@ -42,28 +52,42 @@
     max-width: 300px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     pointer-events: none;
+    z-index: 10;
+  }
+
+  .scroll-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    z-index: 5;
+  }
+
+  .trigger {
+    height: 100vh;
+    scroll-snap-align: start;
+    pointer-events: none;
   }
 </style>
 
 <div class="page">
-  <!-- Scene 0: All dots rolling with hover showing dot name -->
-  <div class="section">
-    <Hill dots={dots} freezeAfterDone={false} showInfoFor={null} onHoverDot={handleHoverDot} />
-    {#if hoveredDot}
-      <div class="info-label">
-         {hoveredDot.description}
-      </div>
-    {/if}
-  </div>
+  <Hill dots={activeDots} freezeAfterDone={freezeAfterDone} />
 
-  <!-- Scene 1–4: Each ball rolls down alone with info -->
-  {#each dots as dot, i}
-    <div class="section">
-      <Hill dots={[dot]} freezeAfterDone={false} showInfoFor={dot.id} onHoverDot={() => {}} />
-      <div class="info-label">
-        <h2>{dot.description}</h2>
-        <p>CHART HERE OR INFO</p>
-      </div>
+  {#if showInfoFor}
+    <div class="info-label">
+      <h2>Dot {showInfoFor}</h2>
+      <p>{activeDots[0].description}</p>
     </div>
-  {/each}
+  {/if}
+
+  <div class="scroll-overlay">
+    <div class="trigger" data-section="0"></div>
+    <div class="trigger" data-section="1"></div>
+    <div class="trigger" data-section="2"></div>
+    <div class="trigger" data-section="3"></div>
+    <div class="trigger" data-section="4"></div>
+  </div>
 </div>

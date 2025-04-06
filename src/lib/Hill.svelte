@@ -2,34 +2,43 @@
   import * as d3 from 'd3';
   import { onMount } from 'svelte';
 
-  const { dots = [], showInfoFor = null, freezeAfterDone = false, onHoverDot = () => {} } = $props();
-
   let svg;
-  const width = 800;
+  const width = 1000;
   const height = 600;
 
-  const hillData = Array.from({ length: 50 }, (_, i) => {
-    const t = i / 49;
+  const hillData = Array.from({ length: 60 }, (_, i) => {
+    const t = i / 59;
     const x = t * width;
-    const y = 100 + 500 * Math.pow(t, 3);
+    const y = 100 + 600 * Math.pow(t, 3.5);
     return { x, y };
   });
 
-  onMount(() => {
-    const dotStates = dots.map(dot => ({ ...dot, index: 0, done: false }));
+  const {
+    dots = [],
+    freezeAfterDone = false,
+    onHoverDot = () => {}
+  } = $props();
 
-    // Making hill
+  onMount(() => {
+
+    const dotStates = dots.map(dot => ({
+      ...dot,
+      index: 0,
+      done: false
+    }));
+
     const svgEl = d3.select(svg)
       .attr('width', width)
       .attr('height', height)
       .html('');
 
+    // Making hill
     svgEl.append('path')
       .datum([...hillData, { x: width, y: height }, { x: 0, y: height }])
       .attr('d', d3.line().x(d => d.x).y(d => d.y).curve(d3.curveBasis))
       .attr('fill', '#a0522d');
 
-    // Making a house (rectangle and polygon)
+    // Making house (rectangle and polygon)
     const houseX = 30;
     const houseY = hillData[0].y;
 
@@ -44,8 +53,7 @@
       .attr('points', `${houseX - 10},${houseY - 40} ${houseX + 25},${houseY - 70} ${houseX + 60},${houseY - 40}`)
       .attr('fill', '#8B0000');
 
-    // Making dots logic
-
+    // Dots logic
     dotStates.forEach(dot => {
       dot.circle = svgEl.append('circle')
         .attr('r', 20)
@@ -69,12 +77,10 @@
         }
 
         const point = hillData[Math.min(Math.floor(dot.index), hillData.length - 1)];
-        dot.circle
-          .attr('cx', point.x)
-          .attr('cy', point.y - 5);
+        dot.circle.attr('cx', point.x).attr('cy', point.y - 5);
       });
     });
   });
 </script>
 
-<svg bind:this={svg}></svg>
+<svg bind:this={svg} style="display: block; width: 100vw; height: 100vh;"></svg>
