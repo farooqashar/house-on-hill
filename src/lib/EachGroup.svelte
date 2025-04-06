@@ -52,6 +52,6 @@
       <div class="stats">
         <strong>Proportion of evictions:</strong> {props.dot.proportion_of_evictions}
       </div>
-      <img src={`/src/assets/${props.dot.eviction_trend}`} alt="Eviction trend for {props.dot.description}" />
+      <img src={`https://raw.githubusercontent.com/farooqashar/house-on-hill/refs/heads/main/src/assets/${props.dot.eviction_trend}`} alt="Eviction trend for {props.dot.description}" />
     </div>
   {/if}
