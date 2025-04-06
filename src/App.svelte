@@ -1,41 +1,69 @@
 <script>
   import Hill from './lib/Hill.svelte';
-  import InfoPanel from './lib/InfoPanel.svelte';
 
   let hoveredDot = null;
 
-  const handleHoverDot = (dot)  => {
+  const dots = [
+    { id: 'A', speed: 0.05, color: '#1f77b4', description: 'Whites' },
+    { id: 'B', speed: 0.08, color: '#ff7f0e', description: 'Blacks' },
+    { id: 'C', speed: 0.11, color: '#2ca02c', description: 'Latinos' },
+    { id: 'D', speed: 0.14, color: '#d62728', description: 'Asians' }
+  ];
+
+  const handleHoverDot = (dot) => {
     hoveredDot = dot;
-  }
+  };
 </script>
 
 <style>
-  .container {
+  .page {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
   }
 
-  .main {
-    flex: 2;
-    background: linear-gradient(#87CEEB, #ffffff);
+  .section {
+    height: 100vh;
+    scroll-snap-align: start;
+    position: relative;
   }
 
-  .side {
-    flex: 1;
-    background: #f7f7f7;
+  .info-label {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    background: rgba(255, 255, 255, 0.9);
     padding: 1rem;
-    border-left: 2px solid #ddd;
-    overflow-y: auto;
+    border-radius: 8px;
+    font-weight: bold;
+    max-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
   }
 </style>
 
-<div class="container">
-  <div class="main">
-    <Hill onHoverDot={handleHoverDot} />
+<div class="page">
+  <!-- Scene 0: All dots rolling with hover showing dot name -->
+  <div class="section">
+    <Hill dots={dots} freezeAfterDone={false} showInfoFor={null} onHoverDot={handleHoverDot} />
+    {#if hoveredDot}
+      <div class="info-label">
+         {hoveredDot.description}
+      </div>
+    {/if}
   </div>
-  <div class="side">
-    <InfoPanel {hoveredDot} />
-  </div>
+
+  <!-- Scene 1–4: Each ball rolls down alone with info -->
+  {#each dots as dot, i}
+    <div class="section">
+      <Hill dots={[dot]} freezeAfterDone={false} showInfoFor={dot.id} onHoverDot={() => {}} />
+      <div class="info-label">
+        <h2>{dot.description}</h2>
+        <p>CHART HERE OR INFO</p>
+      </div>
+    </div>
+  {/each}
 </div>
