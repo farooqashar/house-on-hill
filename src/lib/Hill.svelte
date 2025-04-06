@@ -43,7 +43,7 @@
       .attr('y', houseY - 40)
       .attr('width', 50)
       .attr('height', 40)
-      .attr('fill', '#B22222');
+      .attr('fill', '##E2CD85');
 
     svgEl.append('polygon')
       .attr('points', `${houseX - 10},${houseY - 40} ${houseX + 25},${houseY - 70} ${houseX + 60},${houseY - 40}`)

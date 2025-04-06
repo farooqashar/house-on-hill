@@ -41,7 +41,7 @@
   height: 100vh;
   overflow: hidden;
   font-family: 'Georgia', 'Times New Roman', serif;
-  background-color: #fdb7b7;
+  background-color: #949494;
   color: #f4f4f4;
 }
 
