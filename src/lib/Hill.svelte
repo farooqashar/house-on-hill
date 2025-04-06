@@ -2,6 +2,8 @@
   import * as d3 from 'd3';
   import { onMount } from 'svelte';
 
+  const { dots = [], freezeAfterDone = false, onHoverDot = () => {} } = $props();
+
   let svg;
   const width = 1000;
   const height = 600;
@@ -13,34 +15,22 @@
     return { x, y };
   });
 
-  const {
-    dots = [],
-    freezeAfterDone = false,
-    onHoverDot = () => {}
-  } = $props();
+  let dotStates = [];
 
-  onMount(() => {
+  $effect(() => {
+    if (!svg || !dots.length) return;
 
-    const dotStates = dots.map(dot => ({
-      ...dot,
-      index: 0,
-      done: false
-    }));
+    const svgEl = d3.select(svg).html('').attr('width', width).attr('height', height);
 
-    const svgEl = d3.select(svg)
-      .attr('width', width)
-      .attr('height', height)
-      .html('');
-
-    // Making hill
+    // hill
     svgEl.append('path')
       .datum([...hillData, { x: width, y: height }, { x: 0, y: height }])
       .attr('d', d3.line().x(d => d.x).y(d => d.y).curve(d3.curveBasis))
       .attr('fill', '#a0522d');
 
-    // Making house (rectangle and polygon)
+    // house (includes a rectangle and polygon)
     const houseX = 30;
-    const houseY = hillData[0].y;
+    const houseY = hillData[0].y - 10;
 
     svgEl.append('rect')
       .attr('x', houseX)
@@ -50,20 +40,26 @@
       .attr('fill', '#B22222');
 
     svgEl.append('polygon')
-      .attr('points', `${houseX - 10},${houseY - 40} ${houseX + 25},${houseY - 70} ${houseX + 60},${houseY - 40}`)
+      .attr('points', `${houseX - 10},${houseY - 40} ${houseX + 25},${houseX - 70} ${houseX + 60},${houseY - 40}`)
       .attr('fill', '#8B0000');
 
-    // Dots logic
-    dotStates.forEach(dot => {
-      dot.circle = svgEl.append('circle')
+    dotStates = dots.map(dot => ({
+      ...dot,
+      index: 0,
+      done: false,
+      circle: svgEl.append('circle')
         .attr('r', 20)
         .attr('fill', dot.color)
         .style('cursor', 'pointer')
         .on('mouseover', () => onHoverDot(dot))
-        .on('mouseout', () => onHoverDot(null));
-    });
+        .on('mouseout', () => onHoverDot(null))
+    }));
+  });
 
+  onMount(() => {
     d3.timer(() => {
+      if (!svg || !dotStates.length) return;
+
       let allDone = true;
 
       dotStates.forEach(dot => {
