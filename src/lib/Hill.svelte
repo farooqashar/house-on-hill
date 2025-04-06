@@ -1,6 +1,7 @@
 <script>
   import * as d3 from 'd3';
   import { onMount } from 'svelte';
+  import EachGroup from './EachGroup.svelte';
 
   const {
     activeDots = [],
@@ -102,28 +103,6 @@
 </script>
 
 <style>
-  .hill-info-panel {
-  position: absolute;
-  top: 1rem;
-  right: 2rem;
-  background: hsl(0, 80%, 47%);
-  color: #f4f4f4;
-  padding: 1rem;
-  border: 1px solid #444;
-  border-radius: 8px;
-  max-width: 300px;
-  font-family: 'Georgia', serif;
-}
-
-.hill-info-panel h2 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.5rem;
-}
-
-.hill-info-panel p {
-  margin: 0;
-  font-size: 1rem;
-}
 </style>
 
 <svg bind:this={svg} style="display: block; width: 100vw; height: 100vh;"></svg>
@@ -131,10 +110,7 @@
 {#if showInfoFor}
   {#each activeDots as dot}
     {#if dot.id === showInfoFor}
-      <div class="hill-info-panel">
-        <h2>Dot {dot.id}</h2>
-        <p>{dot.description}</p>
-      </div>
+      <EachGroup {dot}/>
     {/if}
   {/each}
 {/if}
