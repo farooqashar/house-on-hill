@@ -10,8 +10,9 @@
       description: "Whites",
       anectode:
         "No one thinks we can get evicted just because of how we look, but everyone's struggling nowadays.",
-      proportion_of_evictions: "10%",
+      // proportion_of_evictions: "10%",
       eviction_trend: "white_group.PNG",
+      evictions_per_1000: "12.11",
     },
     {
       id: "B",
@@ -20,8 +21,9 @@
       description: "Blacks",
       anectode:
         "I remember going to the door and the sheriff standing there. It scared me because I didn't know why he was at my house.",
-      proportion_of_evictions: "24%",
+      // proportion_of_evictions: "24%",
       eviction_trend: "black_group.PNG",
+      evictions_per_1000: "30.17",
     },
     {
       id: "C",
@@ -30,8 +32,9 @@
       description: "Asians",
       anectode:
         "Everyone looks at us differently. In Boston, there are so many of us struggling due to insane costs.",
-      proportion_of_evictions: "12%",
+      // proportion_of_evictions: "12%",
       eviction_trend: "asian_group.PNG",
+      evictions_per_1000: "16.11",
     },
     {
       id: "D",
@@ -40,8 +43,33 @@
       description: "Latinos",
       anectode:
         "They have given me several notices that they are going to evict me, that they are going to take me to court, that they give me a few days.",
-      proportion_of_evictions: "17%",
+      // proportion_of_evictions: "17%",
       eviction_trend: "hispanic_group.PNG",
+      evictions_per_1000: "23.08",
+    },
+    {
+      id: "E",
+      speed: 0.135,
+      color: "#9467bd",
+      description: "American Indians",
+      anectode: "We’ve been priced out of our own neighborhoods for years.",
+      // proportion_of_evictions: "6%",
+      eviction_trend: "native_group.png",
+      avg_income: "$43,000",
+      housing_cost_burden: "29%",
+      evictions_per_1000: "25.79",
+    },
+    {
+      id: "F",
+      speed: 0.115,
+      color: "#8c564b",
+      description: "Pacific Islanders",
+      anectode: "Our story doesn't always get told, but we're struggling too.",
+      // proportion_of_evictions: "9%",
+      eviction_trend: "pacificislander_group.png",
+      avg_income: "$39,000",
+      housing_cost_burden: "30%",
+      evictions_per_1000: "18.81",
     },
   ];
 
@@ -61,7 +89,7 @@
           }
         });
       },
-      { threshold: 0.6 }
+      { threshold: 0.6 },
     );
 
     triggerElements.forEach((el) => observer.observe(el));
@@ -102,7 +130,7 @@
     >
     <button
       on:click={() => scrollToSection(currentSection + 1)}
-      disabled={currentSection === 4}>↓</button
+      disabled={currentSection === 6}>↓</button
     >
   </div>
 
@@ -113,6 +141,8 @@
     <div class="trigger" data-section="2"></div>
     <div class="trigger" data-section="3"></div>
     <div class="trigger" data-section="4"></div>
+    <div class="trigger" data-section="5"></div>
+    <div class="trigger" data-section="6"></div>
   </div>
 </div>
 
