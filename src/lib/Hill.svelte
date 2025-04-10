@@ -17,7 +17,7 @@
   const hillData = Array.from({ length: 50 }, (_, i) => {
     const t = i / 49;
     const x = t * width;
-    const y = 100 + 500 * Math.pow(t, 3);
+    const y = 210 + 700 * Math.pow(t, 3);
     return { x, y };
   });
 
@@ -67,6 +67,7 @@
       )
       .attr("fill", "#8B0000");
 
+      
     dotStates = activeDots.map((dot) => {
       const circle = svgEl
         .append("circle")
