@@ -12,7 +12,7 @@
 
   let svg;
   const width = 1000;
-  const height = 600;
+  const height = window.innerHeight;
 
   const hillData = Array.from({ length: 50 }, (_, i) => {
     const t = i / 49;
@@ -123,7 +123,7 @@
   });
 </script>
 
-<svg bind:this={svg} style="display: block; width: 100vw; height: 100vh;"></svg>
+<svg bind:this={svg} style="display: block; width={width} height={height}"></svg>
 
 {#if showInfoFor}
   {#each activeDots as dot}
