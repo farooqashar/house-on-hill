@@ -56,7 +56,7 @@
       )
       .attr("fill", "#a0522d");
 
-    // House
+    // House base
     const houseX = 30;
     const houseY = hillData[0].y;
 
@@ -66,15 +66,64 @@
       .attr("y", houseY - 40)
       .attr("width", 50)
       .attr("height", 40)
-      .attr("fill", "#E2CD85");
+      .attr("fill", "#E2CD85")
+      .attr("stroke", "#bfa76f")
+      .attr("stroke-width", 1);
 
+    // Roof
     svgEl
       .append("polygon")
       .attr(
         "points",
-        `${houseX - 10},${houseY - 40} ${houseX + 25},${houseY - 70} ${houseX + 60},${houseY - 40}`
+        `
+    ${houseX - 10},${houseY - 40}
+    ${houseX + 25},${houseY - 70}
+    ${houseX + 60},${houseY - 40}
+  `
       )
       .attr("fill", "#8B0000");
+
+    // Chimney
+    svgEl
+      .append("rect")
+      .attr("x", houseX + 35)
+      .attr("y", houseY - 65)
+      .attr("width", 8)
+      .attr("height", 20)
+      .attr("fill", "#5a1a00");
+
+    // Left window
+    svgEl
+      .append("rect")
+      .attr("x", houseX + 6)
+      .attr("y", houseY - 30)
+      .attr("width", 10)
+      .attr("height", 10)
+      .attr("fill", "#87CEEB")
+      .attr("stroke", "#444")
+      .attr("stroke-width", 0.5);
+
+    // Right window
+    svgEl
+      .append("rect")
+      .attr("x", houseX + 34)
+      .attr("y", houseY - 30)
+      .attr("width", 10)
+      .attr("height", 10)
+      .attr("fill", "#87CEEB")
+      .attr("stroke", "#444")
+      .attr("stroke-width", 0.5);
+
+    // Door
+    svgEl
+      .append("rect")
+      .attr("x", houseX + 20)
+      .attr("y", houseY - 20)
+      .attr("width", 10)
+      .attr("height", 20)
+      .attr("fill", "#7B3F00")
+      .attr("stroke", "#4a2c00")
+      .attr("stroke-width", 0.5);
 
     // Dot setup
     dotStates = activeDots.map((dot) => {
