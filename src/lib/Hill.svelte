@@ -10,6 +10,15 @@
     onHoverDot = () => {},
   } = $props();
 
+  // svelte-ignore non_reactive_update
+  let textboxText =
+    "This hill represents the journey toward housing stability. Each dot is a demographic group, and their speed shows how quickly they're displaced—faster movement means a higher risk of eviction.";
+
+  setTimeout(() => {
+    textboxText =
+      "Groups that move faster down the hill are more vulnerable to eviction. Slower dots represent more stability.";
+  }, 2000);
+
   let svg;
   const width = 1000;
   const height = window.innerHeight;
@@ -130,7 +139,8 @@
   });
 </script>
 
-<svg bind:this={svg} style="display: block; width={width} height={height}"></svg>
+<svg bind:this={svg} style="display: block; width={width} height={height}"
+></svg>
 
 {#if showInfoFor}
   {#each activeDots as dot}
@@ -138,7 +148,24 @@
       <EachGroup {dot} />
     {/if}
   {/each}
+{:else if activeDots.length > 1}
+  <div class="textbox">{textboxText}</div>
 {/if}
 
 <style>
+  .textbox {
+    position: absolute;
+    top: 8rem;
+    right: 2rem;
+    max-width: 320px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #111;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: Georgia, serif;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    z-index: 15;
+    text-align: left;
+  }
 </style>
