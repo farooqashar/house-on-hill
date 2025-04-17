@@ -14,8 +14,8 @@
   const width = 1000;
   const height = window.innerHeight;
 
-  const hillData = Array.from({ length: 50 }, (_, i) => {
-    const t = i / 49;
+  const hillData = Array.from({ length: 100 }, (_, i) => {
+    const t = i / 99;
     const x = t * width;
     const y = 210 + 700 * Math.pow(t, 3);
     return { x, y };
@@ -47,7 +47,7 @@
       )
       .attr("fill", "#a0522d");
 
-    // House (rectangle and polygon)
+    // House
     const houseX = 30;
     const houseY = hillData[0].y;
 
@@ -57,7 +57,7 @@
       .attr("y", houseY - 40)
       .attr("width", 50)
       .attr("height", 40)
-      .attr("fill", "##E2CD85");
+      .attr("fill", "#E2CD85");
 
     svgEl
       .append("polygon")
@@ -67,11 +67,11 @@
       )
       .attr("fill", "#8B0000");
 
-      
+    // Dot setup
     dotStates = activeDots.map((dot) => {
       const circle = svgEl
         .append("circle")
-        .attr("r", 20)
+        .attr("r", 28)
         .attr("fill", dot.color)
         .style("cursor", "pointer")
         .on("mouseover", () => onHoverDot(dot))
@@ -105,19 +105,25 @@
       dotStates.forEach((dot) => {
         if (!freezeAfterDone || !dot.done) {
           if (dot.index < hillData.length - 1) {
-            dot.index += dot.speed;
+            dot.index += dot.speed * 0.8;
           } else {
             dot.done = true;
           }
         }
 
-        const point =
-          hillData[Math.min(Math.floor(dot.index), hillData.length - 1)];
+        const i = Math.floor(dot.index);
+        const t = dot.index - i;
+        const p1 = hillData[i];
+        const p2 = hillData[Math.min(i + 1, hillData.length - 1)];
 
-        dot.circle.attr("cx", point.x).attr("cy", point.y - 5);
+        // interpolate for smooth movement
+        const x = d3.interpolateNumber(p1.x, p2.x)(t);
+        const y = d3.interpolateNumber(p1.y, p2.y)(t);
+
+        dot.circle.attr("cx", x).attr("cy", y - 5);
 
         if (dot.label) {
-          dot.label.attr("x", point.x).attr("y", point.y - 30);
+          dot.label.attr("x", x).attr("y", y - 30);
         }
       });
     });
