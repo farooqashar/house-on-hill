@@ -64,23 +64,27 @@
   };
   // changes dynamically
   $: activeDots =
-    currentSection === 0
-      ? allDots
-      : currentSection === 7
-        ? null
-        : [allDots[currentSection - 1]];
-  $: showInfoFor =
-    currentSection === 0 || currentSection === 7 ? null : activeDots[0].id;
-  $: freezeAfterDone = currentSection === 0;
+  currentSection === 1
+    ? allDots
+    : currentSection > 1 && currentSection < 8
+      ? [allDots[currentSection - 2]]
+      : [];
+
+$: showInfoFor =
+  currentSection === 1 || currentSection === 8 || activeDots.length === 0
+    ? null
+    : activeDots[0].id;
+
+$: freezeAfterDone = currentSection === 1;
 </script>
 
 <!-- Single persistent hill visual -->
 <div class="page">
   <!-- console.log("this is currentSection: {currentSection}"); -->
-  {#if currentSection < 7}
+  {#if currentSection < 8}
     <!-- console.log("this is currentSection: {currentSection}"); -->
     <Hill {activeDots} {showInfoFor} {freezeAfterDone} />
-  {:else if currentSection === 7}
+  {:else if currentSection === 8}
     <!-- console.log("made it this far"); -->
     <!-- <BigScatter/> -->
     <Panel
@@ -99,7 +103,7 @@
     >
     <button
       on:click={() => scrollToSection(currentSection + 1)}
-      disabled={currentSection === 7}>↓</button
+      disabled={currentSection === 8}>↓</button
     >
   </div>
 
@@ -115,6 +119,7 @@
     <div class="trigger" data-section="5"></div>
     <div class="trigger" data-section="6"></div>
     <div class="trigger" data-section="7"></div>
+    <div class="trigger" data-section="8"></div>
   </div>
 </div>
 
