@@ -68,3 +68,44 @@ export const allDots = [
     evictions_per_1000: "18.81",
   },
 ];
+
+export const groupColors = {
+  white: "#1f77b4",
+  black: "#ff7f0e",
+  asian: "#2ca02c",
+  latino: "#d62728",
+  islander: "#9467bd",
+  native: "#8c564b",
+  other: "#e377c2",
+  under50k: "#ffffff",
+  over50k: "#ffffff"
+  // under50k: "#c109f7",
+  // over50k: "#2a9f9a"
+};
+
+export const populationData =
+    {
+      low_inc: 7423,
+      high_inc: 4558,
+      white: 3747,
+      black: 4189,
+      asian: 939,
+      latino: 2525,
+      native: 32,
+      islander: 3,
+      other: 546,
+      white_low: 1664,
+      white_high: 2083,
+      black_low: 2992,
+      black_high: 1197,
+      asian_low: 605,
+      asian_high: 334,
+      latino_low: 1784,
+      latino_high: 741,
+      other_low: 354,
+      other_high: 192,
+      native_low: 22,
+      native_high: 10,
+      islander_low: 2,
+      islander_high: 1
+    };
