@@ -6,10 +6,19 @@
   <div class="hill-info-panel">
     <h2>{props.dot.description}</h2>
     <div class="quote">“{props.dot.anectode}”</div>
-    <div class="stats">
+
+    <!-- <div class="stats">
       <strong>Proportion of evictions:</strong>
       {props.dot.proportion_of_evictions}
-    </div>
+    </div> -->
+
+    {#if props.dot.evictions_per_1000}
+      <div class="stats">
+        <strong>Evictions per 1,000 residents:</strong>
+        {props.dot.evictions_per_1000}
+      </div>
+    {/if}
+
     <img
       src={`https://raw.githubusercontent.com/farooqashar/house-on-hill/refs/heads/main/src/assets/${props.dot.eviction_trend}`}
       alt="Eviction trend for {props.dot.description}"

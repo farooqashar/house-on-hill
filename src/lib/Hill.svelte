@@ -12,12 +12,12 @@
 
   let svg;
   const width = 1000;
-  const height = 600;
+  const height = window.innerHeight;
 
   const hillData = Array.from({ length: 50 }, (_, i) => {
     const t = i / 49;
     const x = t * width;
-    const y = 100 + 500 * Math.pow(t, 3);
+    const y = 210 + 700 * Math.pow(t, 3);
     return { x, y };
   });
 
@@ -67,6 +67,7 @@
       )
       .attr("fill", "#8B0000");
 
+      
     dotStates = activeDots.map((dot) => {
       const circle = svgEl
         .append("circle")
@@ -123,7 +124,7 @@
   });
 </script>
 
-<svg bind:this={svg} style="display: block; width: 100vw; height: 100vh;"></svg>
+<svg bind:this={svg} style="display: block; width={width} height={height}"></svg>
 
 {#if showInfoFor}
   {#each activeDots as dot}
